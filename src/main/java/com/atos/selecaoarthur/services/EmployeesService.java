@@ -12,4 +12,8 @@ public class EmployeesService {
         //TODO
         return null;
     }
+
+    public void updateEmployees(List<Employee> employees) {
+        //TODO
+    }
 }
