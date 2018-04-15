@@ -1,5 +1,12 @@
 package com.atos.selecaoarthur.model;
 
+import com.atos.selecaoarthur.util.json.BrazilianCurrencyStringToDoubleDeserializer;
+import com.atos.selecaoarthur.util.json.BrazilianCurrencyDoubleToStringSerializer;
+import com.atos.selecaoarthur.util.json.ZeroPaddedIntToStringSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.List;
 import java.util.Set;
 
@@ -27,20 +34,23 @@ public class Employee {
         }
     }
 
-    public enum Gcm {
-        GCM1,
-        GCM2,
-        GCM3,
-        GCM4,
-        GCM5
-    }
-
     private Long id;
+
     private String name;
     private EmployeeRole role;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonDeserialize(using = BrazilianCurrencyStringToDoubleDeserializer.class)
+    @JsonSerialize(using = BrazilianCurrencyDoubleToStringSerializer.class)
     private Double salary;
+
     private Employee manager;
-    private Gcm gcm;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ZeroPaddedIntToStringSerializer.class)
+    //TODO Declare Max and Min validation
+    private Integer gcm;
+
     private List<Project> projects;
     //FIXME Change to Skill type
     private Set<String> skills;
@@ -86,11 +96,11 @@ public class Employee {
         this.manager = manager;
     }
 
-    public Gcm getGcm() {
+    public Integer getGcm() {
         return gcm;
     }
 
-    public void setGcm(Gcm gcm) {
+    public void setGcm(Integer gcm) {
         this.gcm = gcm;
     }
 

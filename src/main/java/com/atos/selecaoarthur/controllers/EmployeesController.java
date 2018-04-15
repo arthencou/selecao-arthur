@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class EmployeesController {
     }
 
     @PostMapping("/employees")
-    public void updateEmployees(@RequestBody List<Employee> employees) {
+    public void updateEmployees(@RequestBody @Valid List<Employee> employees) {
 
         employeesService.updateEmployees(employees);
     }

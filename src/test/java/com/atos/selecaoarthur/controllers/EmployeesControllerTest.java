@@ -10,7 +10,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 
@@ -20,6 +19,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -42,30 +42,26 @@ public class EmployeesControllerTest {
 
         willReturn(resource).given(employeesService).getAllEmployees();
 
-        MvcResult json = this.mockMvc.perform(get("/employees"))
+        String content = this.mockMvc.perform(get("/employees"))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString();
 
-        assertThat(json.getResponse().getContentAsString()).contains("\"name\":\"Employee1\"");
-        assertThat(json.getResponse().getContentAsString()).contains("\"name\":\"Employee2\"");
+        assertThat(content).contains("\"name\":\"Employee1\"");
+        assertThat(content).contains("\"name\":\"Employee2\"");
     }
 
     /**
-     * Testa se bloqueia tentativa de atribuir um cargo inválido.
+     * Tests if blocks invalid role attibution attempt.
      */
     @Test
-    public void updateEmployees() throws Exception {
+    public void testInvalidRoleAttributionOnPost() throws Exception {
 
         willDoNothing().given(employeesService).updateEmployees(anyList());
 
         String postContent =
                 "[\n" +
                 "  {\n" +
-                "    \"name\": \"Renato Garcia\",\n" +
-                "    \"role\": \"Invalid Role\",\n" +
-                "    \"salary\": \"2000,00\",\n" +
-                "    \"manager\": \"Marcelo Ricciardi\",\n" +
-                "    \"gcm\": \"05\",\n" +
+                "    \"role\": \"Invalid Role\"\n" +
                 "  }\n" +
                 "]";
 
