@@ -1,16 +1,15 @@
 package com.atos.selecaoarthur.model;
 
-import com.atos.selecaoarthur.util.json.BrazilianCurrencyStringToDoubleDeserializer;
-import com.atos.selecaoarthur.util.json.BrazilianCurrencyDoubleToStringSerializer;
-import com.atos.selecaoarthur.util.json.ZeroPaddedIntToStringSerializer;
+import com.atos.selecaoarthur.util.json.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
-//TODO Make Entity
+@Entity
 public class Employee {
 
     public enum EmployeeRole {
@@ -34,9 +33,15 @@ public class Employee {
         }
     }
 
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EMPLOYEE_SEQ")
+    @SequenceGenerator(name = "EMPLOYEE_SEQ", sequenceName = "EMPLOYEE_SEQ", allocationSize = 1)
     private Long id;
 
     private String name;
+
+    @JsonDeserialize(using = EmployeeRoleDesserializer.class)
     private EmployeeRole role;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -44,6 +49,8 @@ public class Employee {
     @JsonSerialize(using = BrazilianCurrencyDoubleToStringSerializer.class)
     private Double salary;
 
+    @OneToOne
+    @JoinColumn
     private Employee manager;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -51,10 +58,24 @@ public class Employee {
     //TODO Declare Max and Min validation
     private Integer gcm;
 
+    @ManyToMany
+    @JoinTable(name = "EMPLOYEE_PROJECT",
+            joinColumns = {@JoinColumn(name = "EMPLOYEE")},
+            inverseJoinColumns = {@JoinColumn(name = "PROJECT")})
     private List<Project> projects;
-    //FIXME Change to Skill type
-    private Set<String> skills;
-    private List<String> certification;
+
+    @ManyToMany
+    @JoinTable(name = "EMPLOYEE_SKILL",
+            joinColumns = {@JoinColumn(name = "EMPLOYEE")},
+            inverseJoinColumns = {@JoinColumn(name = "SKILL")})
+    @JsonSerialize(using = EmployeeSkillsSerializer.class)
+    //TODO Include deserializer from String array of skill names.
+//    @JsonDeserialize(using = EmployeeSkillsDeserializer.class)
+    private List<Skill> skills;
+
+    @OneToMany
+    @JoinColumn(name = "EMPLOYEE")
+    private List<Certification> certification;
 
     public Long getId() {
         return id;
@@ -112,19 +133,19 @@ public class Employee {
         this.projects = projects;
     }
 
-    public Set<String> getSkills() {
+    public List<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(Set<String> skills) {
+    public void setSkills(List<Skill> skills) {
         this.skills = skills;
     }
 
-    public List<String> getCertification() {
+    public List<Certification> getCertification() {
         return certification;
     }
 
-    public void setCertification(List<String> certification) {
+    public void setCertification(List<Certification> certification) {
         this.certification = certification;
     }
 }

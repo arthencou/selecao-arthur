@@ -3,6 +3,9 @@ package com.atos.selecaoarthur.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 
@@ -73,4 +76,47 @@ public class EmployeeTest {
         assertThat(asJson).contains("\"salary\":\"2123,10\"");
     }
 
+    @Test
+    public void testDeserializesRoleFieldByLongName() throws Exception {
+
+        String asJson = "{\"role\": \"TI Architect\"}";
+
+        ObjectMapper om = new ObjectMapper();
+        Employee employee = om.readValue(asJson, Employee.class);
+
+        assertThat(employee.getRole()).isEqualTo(Employee.EmployeeRole.TI_ARCHITECT);
+    }
+
+    @Test
+    public void testDeserializesListOfSkills() throws Exception {
+
+        //TODO Test deserialization from array of strings (comma separated) skill names.
+
+        String asJson =
+                "{\n" +
+                "  \"skills\": [{\"name\": \"java\"}, {\"name\": \"javaee\"}, {\"name\": \"rest\"}]\n" +
+                "}\n";
+
+        ObjectMapper om = new ObjectMapper();
+        Employee employee = om.readValue(asJson, Employee.class);
+
+        assertThat(employee.getSkills()).hasSize(3);
+    }
+
+    @Test
+    public void testSerializesListOfSkills() throws Exception {
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill("java"));
+        skills.add(new Skill("javaee"));
+        skills.add(new Skill("rest"));
+
+        Employee employee = new Employee();
+        employee.setSkills(skills);
+
+        ObjectMapper om = new ObjectMapper();
+        String asString = om.writeValueAsString(employee);
+
+        assertThat(asString).contains("\"java\",\"javaee\",\"rest\"");
+    }
 }

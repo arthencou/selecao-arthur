@@ -1,10 +1,16 @@
 package com.atos.selecaoarthur.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
-//TODO Make Entity
+@Entity
+@Table(name = "PROJECT")
 public class Project {
 
+    @Id @GeneratedValue
     private Long id;
     private String name;
     private String customer;
