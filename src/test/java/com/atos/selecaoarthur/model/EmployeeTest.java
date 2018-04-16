@@ -119,4 +119,39 @@ public class EmployeeTest {
 
         assertThat(asString).contains("\"java\",\"javaee\",\"rest\"");
     }
+
+    @Test
+    public void testSerializesListOfCertifications() throws Exception {
+
+        List<Certification> certifications = new ArrayList<>();
+        certifications.add(new Certification("Oracle SOA Suite 11g Essentials - Jun 2015"));
+        certifications.add(new Certification("Oracle Certified Professional, Java SE 7 Programmer - Aug 2014"));
+
+        Employee employee = new Employee();
+        employee.setCertification(certifications);
+
+        ObjectMapper om = new ObjectMapper();
+        String asString = om.writeValueAsString(employee);
+
+        assertThat(asString).contains(
+                "\"certification\":[" +
+                "\"Oracle SOA Suite 11g Essentials - Jun 2015\"," +
+                "\"Oracle Certified Professional, Java SE 7 Programmer - Aug 2014\"" +
+                "]");
+    }
+
+    @Test
+    public void testSerializesManager() throws Exception {
+
+        Employee manager = new Employee();
+        manager.setName("Marcelo Ricciardi");
+
+        Employee employee = new Employee();
+        employee.setManager(manager);
+
+        ObjectMapper om = new ObjectMapper();
+        String asString = om.writeValueAsString(employee);
+
+        assertThat(asString).contains("\"manager\":\"Marcelo Ricciardi\"");
+    }
 }

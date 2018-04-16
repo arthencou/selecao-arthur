@@ -41,7 +41,7 @@ public class Employee {
 
     private String name;
 
-    @JsonDeserialize(using = EmployeeRoleDesserializer.class)
+    @JsonDeserialize(using = EmployeeRoleDeserializer.class)
     private EmployeeRole role;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -51,6 +51,7 @@ public class Employee {
 
     @OneToOne
     @JoinColumn
+    @JsonSerialize(using = EmployeeManagerSerializer.class)
     private Employee manager;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -75,6 +76,7 @@ public class Employee {
 
     @OneToMany
     @JoinColumn(name = "EMPLOYEE")
+    @JsonSerialize(using = EmployeeCertificationsSerializer.class)
     private List<Certification> certification;
 
     public Long getId() {

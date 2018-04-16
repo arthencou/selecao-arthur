@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.util.Arrays;
 
 //TODO Document class
-public class EmployeeRoleDesserializer extends StdDeserializer<EmployeeRole> {
+public class EmployeeRoleDeserializer extends StdDeserializer<EmployeeRole> {
 
-    public EmployeeRoleDesserializer() {
+    public EmployeeRoleDeserializer() {
         this(null);
     }
 
-    protected EmployeeRoleDesserializer(Class<?> vc) {
+    protected EmployeeRoleDeserializer(Class<?> vc) {
         super(vc);
     }
 

@@ -14,6 +14,12 @@ public class Certification {
     @JoinColumn
     private Employee employee;
 
+    public Certification() {}
+
+    public Certification(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
