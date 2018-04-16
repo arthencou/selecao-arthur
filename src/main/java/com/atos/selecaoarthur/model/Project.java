@@ -1,5 +1,7 @@
 package com.atos.selecaoarthur.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,6 +12,7 @@ import java.sql.Timestamp;
 @Table(name = "PROJECT")
 public class Project {
 
+    @JsonIgnore
     @Id @GeneratedValue
     private Long id;
     private String name;
