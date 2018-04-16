@@ -42,6 +42,7 @@ public class Employee {
     private String name;
 
     @JsonDeserialize(using = EmployeeRoleDeserializer.class)
+    //FIXME Serialize to enum roleName
     private EmployeeRole role;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)

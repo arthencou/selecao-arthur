@@ -14,6 +14,7 @@ public class Certification {
     private String name;
 
     @ManyToOne
+    //FIXME Those two anotations are generating duplicated foreign keys
     @JoinColumn
     private Employee employee;
 

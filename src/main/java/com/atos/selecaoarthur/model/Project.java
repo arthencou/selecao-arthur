@@ -17,7 +17,9 @@ public class Project {
     private Long id;
     private String name;
     private String customer;
+    //TODO Format decimal to include dots as grouping symbol and commas as decimal separator
     private Double valueOfProject;
+    //TODO Format timestamps to include GMT
     private Timestamp dtBegin;
     private Timestamp dtEnd;
 
